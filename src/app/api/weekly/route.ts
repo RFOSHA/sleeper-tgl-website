@@ -9,6 +9,33 @@ const LEAGUE_ID_MAP = {
 
 export const revalidate = 900; // 15 minutes
 
+type SleeperMatchup = {
+  roster_id: number;
+  matchup_id: number;
+  points: number;
+};
+
+type SleeperRoster = {
+  roster_id: number;
+  owner_id: string;
+};
+
+type SleeperUser = {
+  user_id: string;
+  display_name: string;
+};
+
+type MatchupOutput = {
+  league_name: string;
+  matchup_id: number;
+  team_1_name: string;
+  team_1_score: string;
+  team_2_name: string;
+  team_2_score: string;
+  team_1_record?: { wins: number; losses: number };
+  team_2_record?: { wins: number; losses: number };
+};
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const requestedWeek = parseInt(searchParams.get("week") || "0");
@@ -16,30 +43,42 @@ export async function GET(request: Request) {
   const state = await fetch("https://api.sleeper.app/v1/state/nfl").then((res) => res.json());
   const currentWeek = requestedWeek || (state.week === 0 ? 1 : state.week);
 
-  const allMatchupsThisWeek: any[] = [];
+  const allMatchupsThisWeek: MatchupOutput[] = [];
   const recordMap: Record<string, { wins: number; losses: number }> = {};
 
-  for (const [leagueId, leagueName] of Object.entries(LEAGUE_ID_MAP)) {
-    const rosters = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then(r => r.json());
-    const users = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`).then(r => r.json());
+  for (const [leagueId, leagueName] of Object.entries(LEAGUE_ID_MAP) as [string, string][]) {
+    const rosters: SleeperRoster[] = await fetch(
+      `https://api.sleeper.app/v1/league/${leagueId}/rosters`
+    ).then((r) => r.json());
 
-    const rosterMap = Object.fromEntries(rosters.map((r: any) => [r.roster_id, r.owner_id]));
-    const userMap = Object.fromEntries(users.map((u: any) => [u.user_id, u.display_name]));
+    const users: SleeperUser[] = await fetch(
+      `https://api.sleeper.app/v1/league/${leagueId}/users`
+    ).then((r) => r.json());
+
+    const rosterMap = Object.fromEntries(
+      rosters.map((r) => [r.roster_id, r.owner_id])
+    );
+
+    const userMap = Object.fromEntries(
+      users.map((u) => [u.user_id, u.display_name])
+    );
 
     for (let week = 1; week <= currentWeek; week++) {
-      const matchups = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/matchups/${week}`).then(r => r.json());
+      const matchups: SleeperMatchup[] = await fetch(
+        `https://api.sleeper.app/v1/league/${leagueId}/matchups/${week}`
+      ).then((r) => r.json());
 
-      const grouped = new Map();
-      matchups.forEach((m: any) => {
+      const grouped = new Map<number, SleeperMatchup[]>();
+      matchups.forEach((m) => {
         if (!grouped.has(m.matchup_id)) grouped.set(m.matchup_id, []);
-        grouped.get(m.matchup_id).push(m);
+        grouped.get(m.matchup_id)?.push(m);
       });
 
       for (const [matchupId, pair] of grouped.entries()) {
         if (pair.length === 2) {
           const [t1, t2] = pair;
-          const t1Score = parseFloat(t1.points).toFixed(2);
-          const t2Score = parseFloat(t2.points).toFixed(2);
+          const t1Score = parseFloat(t1.points.toString()).toFixed(2);
+          const t2Score = parseFloat(t2.points.toString()).toFixed(2);
 
           const t1Name = userMap[rosterMap[t1.roster_id]] ?? `Roster ${t1.roster_id}`;
           const t2Name = userMap[rosterMap[t2.roster_id]] ?? `Roster ${t2.roster_id}`;
@@ -58,7 +97,6 @@ export async function GET(request: Request) {
             recordMap[id1].losses += 1;
           }
 
-          // Only keep current week’s matchups for output
           if (week === currentWeek) {
             allMatchupsThisWeek.push({
               league_name: leagueName,
@@ -74,17 +112,27 @@ export async function GET(request: Request) {
     }
   }
 
-  allMatchupsThisWeek.forEach(m => {
+  allMatchupsThisWeek.forEach((m) => {
     const id1 = `${m.league_name}|${m.team_1_name}`;
     const id2 = `${m.league_name}|${m.team_2_name}`;
     m.team_1_record = recordMap[id1];
     m.team_2_record = recordMap[id2];
   });
 
-  const leaderboard = [...allMatchupsThisWeek.flatMap(m => [
-    { team_name: m.team_1_name, points: parseFloat(m.team_1_score), league_name: m.league_name },
-    { team_name: m.team_2_name, points: parseFloat(m.team_2_score), league_name: m.league_name },
-  ])].sort((a, b) => b.points - a.points);
+  const leaderboard = allMatchupsThisWeek
+    .flatMap((m) => [
+      {
+        team_name: m.team_1_name,
+        points: parseFloat(m.team_1_score),
+        league_name: m.league_name,
+      },
+      {
+        team_name: m.team_2_name,
+        points: parseFloat(m.team_2_score),
+        league_name: m.league_name,
+      },
+    ])
+    .sort((a, b) => b.points - a.points);
 
   return NextResponse.json({
     week: currentWeek,
