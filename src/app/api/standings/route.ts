@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const revalidate = 900;
 
+type SleeperUser = {
+  user_id: string;
+  display_name: string;
+};
+
+type SleeperRoster = {
+  roster_id: number;
+  owner_id: string;
+  settings?: {
+    wins?: number;
+    losses?: number;
+    ties?: number;
+    fpts?: number;
+    fpts_against?: number;
+  };
+};
+
 export async function GET(req: NextRequest) {
   const leagueId = req.nextUrl.searchParams.get("league");
 
@@ -9,14 +26,21 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing league ID" }, { status: 400 });
   }
 
-  const [rosters, users] = await Promise.all([
-    fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then((r) => r.json()),
-    fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`).then((r) => r.json()),
+  const [rostersRes, usersRes] = await Promise.all([
+    fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`),
+    fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`),
   ]);
 
-  const userMap = Object.fromEntries(users.map((u: any) => [u.user_id, u.display_name]));
+  if (!rostersRes.ok || !usersRes.ok) {
+    return NextResponse.json({ error: "Failed to fetch data from Sleeper API" }, { status: 502 });
+  }
 
-  const standings = rosters.map((r: any) => {
+  const rosters: SleeperRoster[] = await rostersRes.json();
+  const users: SleeperUser[] = await usersRes.json();
+
+  const userMap = Object.fromEntries(users.map((u) => [u.user_id, u.display_name]));
+
+  const standings = rosters.map((r) => {
     const name = userMap[r.owner_id] ?? `Roster ${r.roster_id}`;
     const s = r.settings ?? {};
     return {

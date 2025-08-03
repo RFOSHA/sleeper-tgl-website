@@ -2,6 +2,29 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
+type SleeperUser = {
+  user_id: string;
+  display_name: string;
+};
+
+type SleeperRoster = {
+  roster_id: number;
+  owner_id: string;
+};
+
+type SleeperMatchup = {
+  matchup_id: number;
+  roster_id: number;
+  starters: string[];
+  points: number;
+};
+
+type SleeperPlayer = {
+  full_name?: string;
+  position?: string;
+  team?: string;
+};
+
 async function getMatchupData(leagueId: string, week: string, matchupId: string) {
   const [rostersRes, usersRes, matchupsRes, playersRes] = await Promise.all([
     fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`),
@@ -12,41 +35,45 @@ async function getMatchupData(leagueId: string, week: string, matchupId: string)
 
   if (!rostersRes.ok || !usersRes.ok || !matchupsRes.ok || !playersRes.ok) return null;
 
-  const [rosters, users, matchups, players] = await Promise.all([
-    rostersRes.json(),
-    usersRes.json(),
-    matchupsRes.json(),
-    playersRes.json(),
-  ]);
+  const rosters: SleeperRoster[] = await rostersRes.json();
+  const users: SleeperUser[] = await usersRes.json();
+  const matchups: SleeperMatchup[] = await matchupsRes.json();
+  const players: Record<string, SleeperPlayer> = await playersRes.json();
 
-  const userMap = Object.fromEntries(users.map((u: any) => [u.user_id, u.display_name]));
-  const rosterMap = Object.fromEntries(rosters.map((r: any) => [r.roster_id, r.owner_id]));
+  const userMap = Object.fromEntries(users.map((u) => [u.user_id, u.display_name]));
+  const rosterMap = Object.fromEntries(rosters.map((r) => [r.roster_id, r.owner_id]));
 
-  const teams = matchups.filter((m: any) => m.matchup_id.toString() === matchupId);
+  const teams = matchups.filter((m) => m.matchup_id.toString() === matchupId);
 
   if (teams.length !== 2) return null;
 
-  const formattedTeams = teams.map((team: any) => {
+  const formattedTeams = teams.map((team) => {
     const ownerId = rosterMap[team.roster_id];
     const manager = userMap[ownerId] || "Unknown";
+
     return {
       manager,
-      points: team.points,
-      starters: team.starters?.map((pid: string) => ({
-        ...players[pid],
-        player_id: pid,
-        name: players[pid]?.full_name ?? "Unknown",
-        position: players[pid]?.position ?? "N/A",
-        team: players[pid]?.team ?? "",
-      })) ?? [],
+      points: team.points ?? 0,
+      starters:
+        team.starters?.map((pid: string) => {
+          const player = players[pid] || {};
+          return {
+            player_id: pid,
+            name: player.full_name ?? "Unknown",
+            position: player.position ?? "N/A",
+            team: player.team ?? "",
+          };
+        }) ?? [],
     };
   });
 
   return formattedTeams;
 }
 
-export default async function MatchupPage({ params }: {
-  params: { leagueId: string; week: string; matchupId: string }
+export default async function MatchupPage({
+  params,
+}: {
+  params: { leagueId: string; week: string; matchupId: string };
 }) {
   const data = await getMatchupData(params.leagueId, params.week, params.matchupId);
 
@@ -63,7 +90,7 @@ export default async function MatchupPage({ params }: {
           {data.map((team, idx) => (
             <div key={idx} className="bg-gray-900 rounded-lg p-6 shadow">
               <h2 className="text-xl font-semibold mb-4 text-purple-400">
-                {team.manager} — {team.points.toFixed(2)} pts
+                {team.manager} — {typeof team.points === "number" ? team.points.toFixed(2) : "—"} pts
               </h2>
               <table className="w-full text-sm text-left">
                 <thead className="text-gray-400">
