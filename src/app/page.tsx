@@ -21,9 +21,9 @@ export default function HomePage() {
         <section className="border border-gray-800 rounded-lg p-6 bg-gray-900 shadow-lg text-left">
           <h2 className="text-2xl font-semibold mb-4 text-purple-400">Commissioner Notes</h2>
           <ul className="list-disc list-inside space-y-3 text-gray-200">
-            <li>Welcome to the new Home Page of The Giving League! Here you can see how you stack up against your league mates anytime you want!</li>
-            <li>Don't worry, the weekly recaps will still be a big part of the league.</li>
-            <li>We're at 88% of league dues submitted. For the non-payers.... prepare to be publicly shamed.</li>
+              <li>Welcome to the new Home Page of The Giving League! Here you can see how you stack up against your league mates anytime you want!</li>
+              <li>Don&apos;t worry, the weekly recaps will still be a big part of the league.</li>
+              <li>We&apos;re at 88% of league dues submitted. For the non-payers... prepare to be publicly shamed.</li>
           </ul>
         </section>
       </div>
