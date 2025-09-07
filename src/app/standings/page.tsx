@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 
 const LEAGUES = [
-  { id: "1131375097056522240", name: "League 1" },
-  { id: "1131374832970670080", name: "League 2" },
-  { id: "1131374220342272000", name: "League 3" },
-  { id: "1131371737138008064", name: "League 4" },
+  { id: "1255317029158662144", name: "League 1" },
+  { id: "1255317690592022528", name: "League 2" },
+  { id: "1255318252108664832", name: "League 3" },
+  { id: "1255318483655196672", name: "League 4" },
 ];
 
 type Entry = {

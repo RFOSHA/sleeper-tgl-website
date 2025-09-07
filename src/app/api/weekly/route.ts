@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
 const LEAGUE_ID_MAP = {
-  "1131375097056522240": "League 1",
-  "1131374832970670080": "League 2",
-  "1131374220342272000": "League 3",
-  "1131371737138008064": "League 4",
+  "1255317029158662144": "League 1",
+  "1255317690592022528": "League 2",
+  "1255318252108664832": "League 3",
+  "1255318483655196672": "League 4",
 };
 
 export const revalidate = 900; // 15 minutes
