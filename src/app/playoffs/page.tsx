@@ -267,17 +267,17 @@ export const dynamic = "force-dynamic";
 
 const PLAYOFF_TEAMS = [
   "SchutteMcGavin",
-  "corybaldwin",
-  "PeakedInHighSkool",
-  "Ceej137",
-  "eazybeasy",
-  "CMarcellus87",
-  "WorldWidePain",
-  "sfbentley",
-  "jmk96",
+  "Bartoneone",
+  "FOZ",
   "stlud92",
+  "eazybeasy",
+  "WorldWidePain",
+  "Ceej137",
+  "sfbentley",
   "DylanJarrett",
-  "DMils",
+  "CMarcellus87",
+  "claytonyingling",
+  "greysonavots",
 ];
 
 type SleeperRoster = {

@@ -10,7 +10,8 @@ export default function Navbar() {
   const navItems = [
     { href: '/weekly', label: 'Weekly Scores' },
     { href: '/league', label: 'Season Leaderboard' },
-    { href: '/standings', label: 'Standings' }
+    { href: '/standings', label: 'Standings' },
+    { href: '/playoffs', label: 'Playoffs' }
   ];
 
   return (
