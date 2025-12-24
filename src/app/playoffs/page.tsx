@@ -326,7 +326,6 @@ const WEEK_PLAYERS: Record<number, string[]> = {
   ],
 
   16: [
-    // UPDATE SEMIFINAL TEAMS
     "eazybeasy",
     "DylanJarrett",
     "SchutteMcGavin",
@@ -334,8 +333,8 @@ const WEEK_PLAYERS: Record<number, string[]> = {
 
   17: [
     // CHAMPIONSHIP TEAMS
-    "Champion A",
-    "Champion B",
+    "eazybeasy",
+    "SchutteMcGavin",
   ],
 };
 
