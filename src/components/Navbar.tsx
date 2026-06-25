@@ -62,6 +62,7 @@ export default function Navbar() {
     { href: '/league', label: 'Season Leaderboard' },
     { href: '/standings', label: 'Standings' },
     { href: '/playoffs', label: 'Playoffs' },
+    { href: '/', label: 'Sign Up' },
   ];
 
   return (
