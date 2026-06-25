@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Instantiated lazily inside the handler so the build doesn't fail without env vars
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 interface SignupPayload {
   firstName: string;
@@ -29,6 +34,8 @@ export async function POST(req: NextRequest) {
 
   const industryDisplay = industry === 'Other' && industryOther ? `Other – ${industryOther}` : industry;
 
+  const supabase = getSupabase();
+
   // Insert into Supabase
   const { error: dbError } = await supabase.from('signups').insert({
     first_name: firstName,
@@ -45,7 +52,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Send notification email
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'The Giving League <onboarding@resend.dev>',
     to: 'nathan.mcgee49@gmail.com',
     subject: `New Sign-Up: ${firstName} ${lastName}`,
