@@ -5,43 +5,43 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const INDUSTRIES = [
-  'Accounting/Finance',
-  'Agriculture',
-  'Architecture',
-  'Business Administration',
-  'Construction',
-  'Education',
-  'Engineering',
-  'Energy',
-  'Healthcare',
-  'Hospitality',
-  'Information Technology (IT)',
-  'Instrumentation & Monitoring (I&M)',
-  'Law/Legal',
-  'Manufacturing',
-  'Marketing',
-  'Real Estate',
-  'Other',
+  '0',
+  '1-2',
+  '3-6',
+  '7-10',
+  '10+',
+  // 'Education',
+  // 'Engineering',
+  // 'Energy',
+  // 'Healthcare',
+  // 'Hospitality',
+  // 'Information Technology (IT)',
+  // 'Instrumentation & Monitoring (I&M)',
+  // 'Law/Legal',
+  // 'Manufacturing',
+  // 'Marketing',
+  // 'Real Estate',
+  // 'Other',
 ];
 
 interface FormData {
   firstName: string;
   lastName: string;
   email: string;
-  company: string;
-  jobTitle: string;
+  // company: string;
+  // jobTitle: string;
   industry: string;
-  industryOther: string;
+  // industryOther: string;
 }
 
 const EMPTY_FORM: FormData = {
   firstName: '',
   lastName: '',
   email: '',
-  company: '',
-  jobTitle: '',
+  // company: '',
+  // jobTitle: '',
   industry: '',
-  industryOther: '',
+  // industryOther: '',
 };
 
 export default function HomePage() {
@@ -99,19 +99,16 @@ export default function HomePage() {
         {/* Story section */}
         <div className="space-y-5 text-gray-300 text-base leading-relaxed">
           <p>
-            The Giving League is a passion project of Nate McGee, who wanted to marry his networking
-            skills and his love/hate relationship with fantasy football in hopes of making the world
-            just a tiny bit better.
+            Welcome to The Giving League!  A passion project of Nate McGee, who wanted to marry his appreciation for data, his need for human interaction, and his love/hate relationship with fantasy football in hopes of making the world just a tiny bit better.
           </p>
           <p>
-            With the help of some close friends and family, 2024 will be the first year this passion
-            project finally takes off.
+            After two strong years, we're ready to make the 2026 season the best one yet!
           </p>
 
           <div className="border border-purple-700 rounded-lg p-5 bg-gray-900">
             <p className="text-white font-medium text-lg mb-2">The Plan</p>
             <p>
-              Get as many professionals to join a massive fantasy football league.{' '}
+              Get as many people as possible to join a massive fantasy football league.{' '}
               <span className="text-purple-400 font-semibold">50% of the buy-in will go to the winner</span>{' '}
               and{' '}
               <span className="text-purple-400 font-semibold">50% will go to Good Sports.</span>
@@ -124,6 +121,10 @@ export default function HomePage() {
             organization that drives equitable access in youth sports and physical activity, by
             supporting children in high-need communities to achieve their greatest potential, on the
             field and in life.
+          </p>
+
+          <p>
+            So far we&apos;ve raised $4,800 for <span className="text-white font-semibold">Good Sports</span>!
           </p>
 
           <div className="border border-green-700 rounded-lg p-5 bg-gray-900 space-y-2">
@@ -144,15 +145,15 @@ export default function HomePage() {
           <p>
             If you&apos;re interested, please fill out the fields below and be on the lookout for
             an email from Nate McGee at{' '}
-            <a href="mailto:nathan.mcgee49@gmail.com" className="text-purple-400 underline">
-              nathan.mcgee49@gmail.com
+            <a href="mailto:nate.mcgee@thegivingleague.org" className="text-purple-400 underline">
+              nate.mcgee@thegivingleague.org
             </a>
             , where he&apos;ll explain the rules and answer any questions.
           </p>
 
           <p>
             Also, if fantasy football isn&apos;t your thing but you still want to donate, feel free
-            to do so{' '}
+            to do so here{' '}
             <Link
               href="https://support.goodsports.org/campaign/thegivingleague"
               target="_blank"
@@ -176,7 +177,7 @@ export default function HomePage() {
               <p className="text-green-400 text-2xl font-bold">You&apos;re in!</p>
               <p className="text-gray-300">
                 Thanks for signing up. Keep an eye on your inbox for an email from Nate at{' '}
-                <span className="text-purple-400">nathan.mcgee49@gmail.com</span>.
+                <span className="text-purple-400">nate.mcgee@thegivingleague.org</span>.
               </p>
               <button
                 onClick={() => setStatus('idle')}
@@ -210,7 +211,7 @@ export default function HomePage() {
                 </Field>
               </div>
 
-              <Field label="Email (company or personal)" required>
+              <Field label="Email" required>
                 <input
                   name="email"
                   type="email"
@@ -222,7 +223,7 @@ export default function HomePage() {
                 />
               </Field>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <Field label="Company">
                   <input
                     name="company"
@@ -241,9 +242,9 @@ export default function HomePage() {
                     placeholder="Software Engineer"
                   />
                 </Field>
-              </div>
+              </div> */}
 
-              <Field label="Industry" required>
+              <Field label="Years of Fantasy Football Experience" required>
                 <select
                   name="industry"
                   value={form.industry}
@@ -251,14 +252,14 @@ export default function HomePage() {
                   required
                   className={inputClass}
                 >
-                  <option value="" disabled>Select your industry</option>
+                  <option value="" disabled>Select your experience</option>
                   {INDUSTRIES.map((ind) => (
                     <option key={ind} value={ind}>{ind}</option>
                   ))}
                 </select>
               </Field>
 
-              {form.industry === 'Other' && (
+              {/* {form.industry === 'Other' && (
                 <Field label="Please specify your industry" required>
                   <input
                     name="industryOther"
@@ -269,7 +270,7 @@ export default function HomePage() {
                     placeholder="e.g. Nonprofit, Government..."
                   />
                 </Field>
-              )}
+              )} */}
 
               {status === 'error' && (
                 <p className="text-red-400 text-sm">{errorMsg}</p>

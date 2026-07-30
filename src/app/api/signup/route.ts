@@ -61,9 +61,9 @@ export async function POST(req: NextRequest) {
       <table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;">
         <tr><td><strong>Name</strong></td><td>${firstName} ${lastName}</td></tr>
         <tr><td><strong>Email</strong></td><td>${email}</td></tr>
-        <tr><td><strong>Company</strong></td><td>${company || '—'}</td></tr>
-        <tr><td><strong>Job Title</strong></td><td>${jobTitle || '—'}</td></tr>
-        <tr><td><strong>Industry</strong></td><td>${industryDisplay}</td></tr>
+        // <tr><td><strong>Company</strong></td><td>${company || '—'}</td></tr>
+        // <tr><td><strong>Job Title</strong></td><td>${jobTitle || '—'}</td></tr>
+        <tr><td><strong>Experience</strong></td><td>${industryDisplay}</td></tr>
       </table>
     `,
   });
