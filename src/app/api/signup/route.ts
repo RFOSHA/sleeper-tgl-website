@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   // Send notification email
   await getResend().emails.send({
     from: 'The Giving League <onboarding@resend.dev>',
-    to: 'nathan.mcgee49@gmail.com',
+    to: 'nate.mcgee@thegivingleague.org',
     subject: `New Sign-Up: ${firstName} ${lastName}`,
     html: `
       <h2>New Giving League Sign-Up</h2>
