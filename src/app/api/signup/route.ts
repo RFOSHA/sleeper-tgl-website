@@ -52,8 +52,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Send notification email
-  await getResend().emails.send({
-    from: 'The Giving League <onboarding@resend.dev>',
+  const { error: emailError } = await getResend().emails.send({
+    // from: 'The Giving League <onboarding@resend.dev>',
+    from: 'The Giving League <notifications@thegivingleague.org>',
     to: 'nate.mcgee@thegivingleague.org',
     subject: `New Sign-Up: ${firstName} ${lastName}`,
     html: `
@@ -61,12 +62,16 @@ export async function POST(req: NextRequest) {
       <table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;">
         <tr><td><strong>Name</strong></td><td>${firstName} ${lastName}</td></tr>
         <tr><td><strong>Email</strong></td><td>${email}</td></tr>
-        // <tr><td><strong>Company</strong></td><td>${company || '—'}</td></tr>
-        // <tr><td><strong>Job Title</strong></td><td>${jobTitle || '—'}</td></tr>
+        <tr><td><strong>Company</strong></td><td>${company || '—'}</td></tr>
+        <tr><td><strong>Job Title</strong></td><td>${jobTitle || '—'}</td></tr>
         <tr><td><strong>Experience</strong></td><td>${industryDisplay}</td></tr>
       </table>
     `,
   });
+
+  if (emailError) {
+    console.error('Resend send error:', emailError);
+  }
 
   return NextResponse.json({ ok: true });
 }
