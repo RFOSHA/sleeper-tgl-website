@@ -155,7 +155,7 @@ export default function HomePage() {
             Also, if fantasy football isn&apos;t your thing but you still want to donate, feel free
             to do so here{' '}
             <Link
-              href="https://support.goodsports.org/campaign/thegivingleague"
+              href="https://support.goodsports.org/campaign/833190/donate"
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-400 underline"
