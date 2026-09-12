@@ -61,7 +61,7 @@ export default function Navbar() {
     { href: '/weekly', label: 'Weekly Scores' },
     { href: '/league', label: 'Season Leaderboard' },
     { href: '/standings', label: 'Standings' },
-    { href: '/playoffs', label: 'Playoffs' },
+    // { href: '/playoffs', label: 'Playoffs' }, // hidden for now — uncomment to restore
     { href: '/', label: 'Sign Up' },
   ];
 
