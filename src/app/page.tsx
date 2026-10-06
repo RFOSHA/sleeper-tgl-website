@@ -105,7 +105,7 @@ export default function HomePage() {
             After two strong years, we're ready to make the 2026 season the best one yet!
           </p>
 
-          <div className="border border-purple-700 rounded-lg p-5 bg-gray-900">
+          {/* <div className="border border-purple-700 rounded-lg p-5 bg-gray-900">
             <p className="text-white font-medium text-lg mb-2">The Plan</p>
             <p>
               Get as many people as possible to join a massive fantasy football league.{' '}
@@ -113,9 +113,19 @@ export default function HomePage() {
               and{' '}
               <span className="text-purple-400 font-semibold">50% will go to Good Sports.</span>
             </p>
+          </div> */}
+
+          <div className="border border-purple-700 rounded-lg p-5 bg-gray-900">
+            <p className="text-white font-medium text-lg mb-2">2027 Season</p>
+            <p>
+              If you are interested in playing in 2027, fill out the short sign up sheet below and we will include you in next year's league!{' '}
+              {/* <span className="text-purple-400 font-semibold">50% of the buy-in will go to the winner</span>{' '}
+              and{' '}
+              <span className="text-purple-400 font-semibold">50% will go to Good Sports.</span> */}
+            </p>
           </div>
 
-          <p>
+          {/* <p>
             If you&apos;re not familiar,{' '}
             <span className="text-white font-semibold">Good Sports</span> is a charitable
             organization that drives equitable access in youth sports and physical activity, by
@@ -149,7 +159,7 @@ export default function HomePage() {
               nate.mcgee@thegivingleague.org
             </a>
             , where he&apos;ll explain the rules and answer any questions.
-          </p>
+          </p> */}
 
           <p>
             Also, if fantasy football isn&apos;t your thing but you still want to donate, feel free
